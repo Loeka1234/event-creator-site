@@ -1,4 +1,5 @@
+import { LandingPageLayout } from "../layouts/LandingPageLayout";
 
-const Index = () => <div>Hello world!</div>;
+const Index = () => <LandingPageLayout>Hello world!</LandingPageLayout>;
 
 export default Index;
