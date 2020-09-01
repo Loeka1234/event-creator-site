@@ -7,6 +7,7 @@ import { useLoginMutation, MeDocument, MeQuery } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { LandingPageLayout } from "../layouts/LandingPageLayout";
+import { withApollo } from "./../utils/withApollo";
 
 const Login: NextPage = () => {
 	const [login] = useLoginMutation();
@@ -63,4 +64,4 @@ const Login: NextPage = () => {
 	);
 };
 
-export default Login;
+export default withApollo({ ssr: false })(Login);

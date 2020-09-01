@@ -11,6 +11,7 @@ import {
 	Icon,
 } from "@chakra-ui/core";
 import Link from "next/link";
+import { withApollo } from "./../utils/withApollo";
 
 const Index = () => (
 	<LandingPageLayout>
@@ -133,4 +134,4 @@ const Index = () => (
 	</LandingPageLayout>
 );
 
-export default Index;
+export default withApollo({ ssr: false })(Index);

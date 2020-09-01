@@ -7,6 +7,7 @@ import { useRegisterMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { LandingPageLayout } from "../layouts/LandingPageLayout";
+import { withApollo } from "./../utils/withApollo";
 
 const Register: NextPage = () => {
 	const [register] = useRegisterMutation();
@@ -71,4 +72,4 @@ const Register: NextPage = () => {
 	);
 };
 
-export default Register;
+export default withApollo({ ssr: false })(Register);
