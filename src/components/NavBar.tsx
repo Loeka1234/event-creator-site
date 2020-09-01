@@ -2,12 +2,15 @@ import { Flex, Heading, Box, Button, Link, Text } from "@chakra-ui/core";
 import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
 import NextLink from "next/link";
-import { useMeQuery } from "./../generated/graphql";
+import { useMeQuery, useLogoutMutation } from "../generated/graphql";
+import { useApolloClient } from "@apollo/client";
 
 export interface Props {}
 
 export const NavBar: React.FC<Props> = ({}) => {
 	const { data, loading } = useMeQuery();
+	const [logout] = useLogoutMutation();
+	const apolloclient = useApolloClient();
 	const [show, setShow] = useState(false);
 	const handleToggle = () => setShow(!show);
 
@@ -80,7 +83,16 @@ export const NavBar: React.FC<Props> = ({}) => {
 							<Text fontSize="xl" color="gray.700">
 								{data.me.username}
 							</Text>
-							<Link color="gray.700" mx={4} fontSize={20}>
+							<Link
+								as="button"
+								color="gray.700"
+								mx={4}
+								fontSize={20}
+								onClick={async () => {
+									await logout();
+									await apolloclient.resetStore();
+								}}
+							>
 								Logout
 							</Link>
 						</>
