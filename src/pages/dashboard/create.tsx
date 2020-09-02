@@ -60,6 +60,7 @@ const Create: NextPage = () => {
 								name="description"
 								label="Description"
 								placeholder="description"
+								textarea
 							/>
 							<Button
 								type="submit"

@@ -1,0 +1,15 @@
+query EventById($id: Int!) {
+	eventById(id: $id) {
+		id
+		title
+		description
+		creatorId
+		creator {
+			id
+			username
+			email
+			createdAt
+			updatedAt
+		}
+	}
+}

@@ -46,16 +46,19 @@ const Dashboard: NextPage = () => {
 								align="center"
 								boxShadow="sm"
 							>
-								<Heading
-									as="h2"
-									fontWeight={600}
-									letterSpacing={-1}
-									fontSize={28}
-									isTruncated
-									maxW={{ sm: "70%", md: "80%" }}
-								>
-									{capitalizeFirstLetter(title)}
-								</Heading>
+								<Link href="/events/[id]" as={`/events/${id}`}>
+									<Heading
+										as="a"
+										fontWeight={600}
+										letterSpacing={-1}
+										fontSize={28}
+										isTruncated
+										maxW={{ sm: "70%", md: "80%" }}
+										cursor="pointer"
+									>
+										{capitalizeFirstLetter(title)}
+									</Heading>
+								</Link>
 								<Box>
 									<IconButton
 										icon="edit"
