@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { withApollo } from "../../utils/withApollo";
-import { useEventByIdQuery, useEventsQuery } from "../../generated/graphql";
+import { useEventByIdQuery } from "../../generated/graphql";
 import { LandingPageLayout } from "../../layouts/LandingPageLayout";
 import { useEffect } from "react";
 import { useRouter } from "next/router";

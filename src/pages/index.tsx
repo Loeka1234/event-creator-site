@@ -7,7 +7,6 @@ import {
 	Badge,
 	Button,
 	Divider,
-	Grid,
 	Icon,
 } from "@chakra-ui/core";
 import Link from "next/link";

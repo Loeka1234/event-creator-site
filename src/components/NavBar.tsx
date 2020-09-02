@@ -1,6 +1,6 @@
 import { Flex, Heading, Box, Button, Link } from "@chakra-ui/core";
 import { FiMenu } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useApolloClient } from "@apollo/client";
