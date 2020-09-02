@@ -17,6 +17,7 @@ export const NavBar: React.FC<Props> = ({}) => {
 
 	if (loading && !error) return null;
 
+	
 	return (
 		<Box as="header" borderBottom="1px solid" borderBottomColor="gray.200">
 			<Flex
