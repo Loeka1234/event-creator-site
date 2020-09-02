@@ -2,7 +2,7 @@ import { theme as chakraTheme } from "@chakra-ui/core";
 
 const fonts = { ...chakraTheme.fonts, mono: `'Menlo', monospace` };
 
-const breakpoints: any = ["360px", "768px", "1024px", "1440px"];
+const breakpoints: any = ["200px", "768px", "1024px", "1440px"];
 breakpoints.sm = breakpoints[0];
 breakpoints.md = breakpoints[1];
 breakpoints.lg = breakpoints[2];
