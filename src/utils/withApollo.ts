@@ -5,7 +5,20 @@ import { NextPageContext } from "next";
 const createClient = (ctx: NextPageContext) =>
 	new ApolloClient({
 		uri: "http://localhost:4000/graphql",
-		cache: new InMemoryCache(),
+		cache: new InMemoryCache({
+			typePolicies: {
+				Query: {
+					fields: {
+						events: {
+							keyArgs: [],
+							merge(_ignored, incoming) {
+								return incoming;
+							},
+						},
+					},
+				},
+			},
+		}),
 		credentials: "include",
 		headers: {
 			cookie:

@@ -22,6 +22,11 @@ export const Pages: React.FC<Props> = ({ pages }) => {
           <BreadcrumbLink>Home</BreadcrumbLink>
         </Link>
       </BreadcrumbItem>
+      <BreadcrumbItem>
+        <Link href="/dashboard">
+          <BreadcrumbLink>Dashboard</BreadcrumbLink>
+        </Link>
+      </BreadcrumbItem>
       {pages.map(({ name, path }, i) => (
         <BreadcrumbItem key={i}>
           <Link href={path}>

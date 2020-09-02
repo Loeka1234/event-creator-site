@@ -50,7 +50,7 @@ export type Mutation = {
   changePassword: UserResponse;
   createEvent: EventResponse;
   updateEvent?: Maybe<Event>;
-  deleteEvent?: Maybe<Scalars['Boolean']>;
+  deleteEvent: Scalars['Boolean'];
 };
 
 
@@ -92,7 +92,7 @@ export type MutationUpdateEventArgs = {
 
 
 export type MutationDeleteEventArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -153,6 +153,16 @@ export type CreateEventMutation = (
   ) }
 );
 
+export type DeleteEventMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteEventMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEvent'>
+);
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -210,6 +220,17 @@ export type RegisterMutation = (
       & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
     )> }
   ) }
+);
+
+export type EventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EventsQuery = (
+  { __typename?: 'Query' }
+  & { events: Array<(
+    { __typename?: 'Event' }
+    & Pick<Event, 'id' | 'title' | 'description'>
+  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -308,6 +329,36 @@ export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
 export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
 export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
+export const DeleteEventDocument = gql`
+    mutation DeleteEvent($id: Int!) {
+  deleteEvent(id: $id)
+}
+    `;
+export type DeleteEventMutationFn = Apollo.MutationFunction<DeleteEventMutation, DeleteEventMutationVariables>;
+
+/**
+ * __useDeleteEventMutation__
+ *
+ * To run a mutation, you first call `useDeleteEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEventMutation, { data, loading, error }] = useDeleteEventMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteEventMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventMutation, DeleteEventMutationVariables>) {
+        return Apollo.useMutation<DeleteEventMutation, DeleteEventMutationVariables>(DeleteEventDocument, baseOptions);
+      }
+export type DeleteEventMutationHookResult = ReturnType<typeof useDeleteEventMutation>;
+export type DeleteEventMutationResult = Apollo.MutationResult<DeleteEventMutation>;
+export type DeleteEventMutationOptions = Apollo.BaseMutationOptions<DeleteEventMutation, DeleteEventMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -454,6 +505,40 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const EventsDocument = gql`
+    query Events {
+  events {
+    id
+    title
+    description
+  }
+}
+    `;
+
+/**
+ * __useEventsQuery__
+ *
+ * To run a query within a React component, call `useEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEventsQuery(baseOptions?: Apollo.QueryHookOptions<EventsQuery, EventsQueryVariables>) {
+        return Apollo.useQuery<EventsQuery, EventsQueryVariables>(EventsDocument, baseOptions);
+      }
+export function useEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EventsQuery, EventsQueryVariables>) {
+          return Apollo.useLazyQuery<EventsQuery, EventsQueryVariables>(EventsDocument, baseOptions);
+        }
+export type EventsQueryHookResult = ReturnType<typeof useEventsQuery>;
+export type EventsLazyQueryHookResult = ReturnType<typeof useEventsLazyQuery>;
+export type EventsQueryResult = Apollo.QueryResult<EventsQuery, EventsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

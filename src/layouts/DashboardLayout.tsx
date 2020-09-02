@@ -3,7 +3,6 @@ import { Wrapper } from "../components/Wrapper";
 import { Pages } from "../components/dashboard/Pages";
 import { useMeQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export interface DashboardLayoutProps {
   pages: DashboardPages;
