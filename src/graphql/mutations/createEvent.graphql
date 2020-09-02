@@ -1,0 +1,13 @@
+mutation CreateEvent($title: String!, $description: String) {
+  createEvent(title: $title, description: $description) {
+    error {
+      field
+      message
+    }
+    event {
+      id
+      title
+      description
+    }
+  }
+}

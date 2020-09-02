@@ -36,7 +36,7 @@ export type Event = {
   __typename?: 'Event';
   id?: Maybe<Scalars['Int']>;
   title: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   creatorId: Scalars['Float'];
   creator: User;
 };
@@ -48,7 +48,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
-  createEvent: Event;
+  createEvent: EventResponse;
   updateEvent?: Maybe<Event>;
   deleteEvent?: Maybe<Scalars['Boolean']>;
 };
@@ -79,7 +79,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreateEventArgs = {
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -107,6 +107,12 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type EventResponse = {
+  __typename?: 'EventResponse';
+  error?: Maybe<FieldError>;
+  event?: Maybe<Event>;
+};
+
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -123,6 +129,26 @@ export type ChangePasswordMutation = (
     )>, user?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+    )> }
+  ) }
+);
+
+export type CreateEventMutationVariables = Exact<{
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateEventMutation = (
+  { __typename?: 'Mutation' }
+  & { createEvent: (
+    { __typename?: 'EventResponse' }
+    & { error?: Maybe<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>, event?: Maybe<(
+      { __typename?: 'Event' }
+      & Pick<Event, 'id' | 'title' | 'description'>
     )> }
   ) }
 );
@@ -241,6 +267,47 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const CreateEventDocument = gql`
+    mutation CreateEvent($title: String!, $description: String) {
+  createEvent(title: $title, description: $description) {
+    error {
+      field
+      message
+    }
+    event {
+      id
+      title
+      description
+    }
+  }
+}
+    `;
+export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation, CreateEventMutationVariables>;
+
+/**
+ * __useCreateEventMutation__
+ *
+ * To run a mutation, you first call `useCreateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useCreateEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateEventMutation, CreateEventMutationVariables>) {
+        return Apollo.useMutation<CreateEventMutation, CreateEventMutationVariables>(CreateEventDocument, baseOptions);
+      }
+export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
+export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
+export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
