@@ -15,6 +15,7 @@ import {
 	PopoverCloseButton,
 	PopoverBody,
 	PopoverFooter,
+	Spinner,
 } from "@chakra-ui/core";
 import Link from "next/link";
 import { DashboardLayout } from "../layouts/DashboardLayout";
@@ -59,10 +60,17 @@ const Dashboard: NextPage = () => {
 									</Heading>
 								</Link>
 								<Box>
-									<IconButton
-										icon="edit"
-										aria-label="Edit event"
-									/>
+									<Link
+										href="/dashboard/edit/[id]"
+										as={`/dashboard/edit/${id}`}
+									>
+										<IconButton
+											icon="edit"
+											aria-label="Edit event"
+											as="a"
+											cursor="pointer"
+										/>
+									</Link>
 									<Popover
 										returnFocusOnClose={false}
 										isOpen={openId === id}
@@ -142,7 +150,9 @@ const Dashboard: NextPage = () => {
 					</Link>
 				</>
 			) : (
-				<div>Loading</div>
+				<Flex justify="center" minH="80vh" align="center">
+					<Spinner size="xl" />
+				</Flex>
 			)}
 		</DashboardLayout>
 	);

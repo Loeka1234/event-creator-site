@@ -1,0 +1,8 @@
+mutation UpdateEvent($title: String!, $description: String, $id: Int!) {
+	updateEvent(title: $title, description: $description, id: $id) {
+		id
+		title
+		description
+		creatorId
+	}
+}
