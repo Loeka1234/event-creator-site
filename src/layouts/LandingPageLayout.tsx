@@ -6,7 +6,7 @@ export const LandingPageLayout: React.FC<Props> = ({ children }) => {
   return (
     <>
       <NavBar />
-      {children}
+      <main>{children}</main>
     </>
   );
 };
