@@ -53,24 +53,20 @@ const Dashboard: NextPage = () => {
               >
                 <AccordionHeader
                   _focus={{
-                    boxShadow: "none !important",
+                    boxShadow: "none",
                   }}
                 >
-                  <Flex
-                    justify="space-between"
-                    align="center"
-                    width="100%"
-                  >
+                  <Flex justify="space-between" align="center" width="100%">
                     <Heading
                       as="a"
                       fontWeight={600}
                       letterSpacing={-1}
                       fontSize={28}
                       isTruncated
-											flex={1}
-											textAlign="left"
-											cursor="pointer"
-											mr={1}
+                      flex={1}
+                      textAlign="left"
+                      cursor="pointer"
+                      mr={1}
                     >
                       {capitalizeFirstLetter(title)}
                     </Heading>
@@ -84,6 +80,7 @@ const Dashboard: NextPage = () => {
                           aria-label="Edit event"
                           as="a"
                           cursor="pointer"
+                          onClick={e => e.stopPropagation()}
                         />
                       </Link>
                       <Popover
@@ -99,7 +96,8 @@ const Dashboard: NextPage = () => {
                             aria-label="Edit event"
                             variantColor="red"
                             ml={2}
-                            onClick={() => {
+                            onClick={e => {
+                              e.stopPropagation();
                               setOpenId(id!);
                             }}
                           />
@@ -109,7 +107,9 @@ const Dashboard: NextPage = () => {
                             Confirmation
                           </PopoverHeader>
                           <PopoverArrow />
-                          <PopoverCloseButton />
+                          <PopoverCloseButton
+                            onClick={(e: any) => e.stopPropagation()}
+                          />
                           <PopoverBody>
                             Do you want to delete this event? This is an action
                             that can't be undone.
