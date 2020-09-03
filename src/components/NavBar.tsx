@@ -1,4 +1,15 @@
-import { Flex, Heading, Box, Button, Link } from "@chakra-ui/core";
+import {
+	Flex,
+	Heading,
+	Box,
+	Button,
+	Link,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	Icon,
+} from "@chakra-ui/core";
 import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
 import NextLink from "next/link";
@@ -17,7 +28,6 @@ export const NavBar: React.FC<Props> = ({}) => {
 
 	if (loading && !error) return null;
 
-	
 	return (
 		<Box as="header" borderBottom="1px solid" borderBottomColor="gray.200">
 			<Flex
@@ -82,11 +92,36 @@ export const NavBar: React.FC<Props> = ({}) => {
 				>
 					{data?.me ? (
 						<>
-							<NextLink href="/dashboard">
-								<Link fontSize={20} color="gray.700">
+							<Menu>
+								<MenuButton
+									as={Link}
+									color="gray.700"
+									fontSize={20}
+								>
 									{capitalizeFirstLetter(data.me.username)}
-								</Link>
-							</NextLink>
+									<Icon name="chevron-down" />
+								</MenuButton>
+								<MenuList>
+									<NextLink href="/dashboard">
+										<MenuItem
+											as={Link}
+											color="gray.700"
+											fontSize={18}
+										>
+											Dashboard
+										</MenuItem>
+									</NextLink>
+									<NextLink href="/dashboard/profile">
+										<MenuItem
+											as={Link}
+											color="gray.700"
+											fontSize={18}
+										>
+											Profile
+										</MenuItem>
+									</NextLink>
+								</MenuList>
+							</Menu>
 							<Link
 								as="button"
 								color="gray.700"
