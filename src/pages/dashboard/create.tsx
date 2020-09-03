@@ -12,6 +12,7 @@ import {
 } from "../../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useRouter } from "next/router";
+import { EventForm } from "../../components/dashboard/EventForm";
 
 const Create: NextPage = () => {
 	const [createEvent] = useCreateEventMutation();
@@ -21,9 +22,12 @@ const Create: NextPage = () => {
 			pages={[{ name: "Create Event", path: "/dashboard/create" }]}
 		>
 			<Wrapper variant="small">
-				<Formik
-					initialValues={{ title: "", description: "" }}
-					onSubmit={async (values, { setErrors }) => {
+				<EventForm
+					buttonText="Create Event"
+					onSubmit={async (
+						{ useMaxReservations: _, ...values },
+						{ setErrors }
+					) => {
 						const { data } = await createEvent({
 							variables: values,
 							update: (cache, { data: _data }) => {
@@ -48,31 +52,7 @@ const Create: NextPage = () => {
 							setErrors(toErrorMap(data.createEvent.error));
 						else router.push("/dashboard");
 					}}
-				>
-					{({ isSubmitting }) => (
-						<Form>
-							<InputField
-								name="title"
-								label="Title*"
-								placeholder="title"
-							/>
-							<InputField
-								name="description"
-								label="Description"
-								placeholder="description"
-								textarea
-							/>
-							<Button
-								type="submit"
-								variantColor="teal"
-								mt={2}
-								isLoading={isSubmitting}
-							>
-								Create Event
-							</Button>
-						</Form>
-					)}
-				</Formik>
+				/>
 			</Wrapper>
 		</DashboardLayout>
 	);

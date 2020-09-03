@@ -1,13 +1,21 @@
-mutation CreateEvent($title: String!, $description: String) {
-  createEvent(title: $title, description: $description) {
-    error {
-      field
-      message
-    }
-    event {
-      id
-      title
-      description
-    }
-  }
+mutation CreateEvent(
+	$title: String!
+	$description: String
+	$maxReservations: Int
+) {
+	createEvent(
+		title: $title
+		description: $description
+		maxReservations: $maxReservations
+	) {
+		error {
+			field
+			message
+		}
+		event {
+			id
+			title
+			description
+		}
+	}
 }

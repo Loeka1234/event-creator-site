@@ -8,6 +8,7 @@ import { Button, Flex, Spinner } from "@chakra-ui/core";
 import { useEventByIdQuery } from "../../../generated/graphql";
 import { Wrapper } from "../../../components/Wrapper";
 import { useUpdateEventMutation } from "./../../../generated/graphql";
+import { EventForm } from "../../../components/dashboard/EventForm";
 
 // TODO: fix backend for this
 const Edit: NextPage = ({}) => {
@@ -30,11 +31,7 @@ const Edit: NextPage = ({}) => {
 			]}
 		>
 			<Wrapper variant="small">
-				<Formik
-					initialValues={{
-						title: data?.eventById?.title,
-						description: data?.eventById?.description,
-					}}
+				<EventForm
 					onSubmit={async data => {
 						await updateEvent({
 							variables: {
@@ -45,31 +42,16 @@ const Edit: NextPage = ({}) => {
 						});
 						router.push("/dashboard");
 					}}
-				>
-					{({ isSubmitting }) => (
-						<Form>
-							<InputField
-								name="title"
-								label="Title*"
-								placeholder="title"
-							/>
-							<InputField
-								name="description"
-								label="Description"
-								placeholder="description"
-								textarea
-							/>
-							<Button
-								variantColor="teal"
-								type="submit"
-                                isLoading={isSubmitting}
-                                mt={2}
-							>
-								Edit Event
-							</Button>
-						</Form>
-					)}
-				</Formik>
+					buttonText="Edit Event"
+					initialValues={{
+						title: data?.eventById?.title || "",
+						description: data?.eventById?.description || "",
+						useMaxReservations: data?.eventById?.maxReservations
+							? true
+							: false,
+						maxReservations: data?.eventById?.maxReservations || 10,
+					}}
+				/>
 			</Wrapper>
 		</DashboardLayout>
 	);

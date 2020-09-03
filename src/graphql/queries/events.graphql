@@ -3,5 +3,7 @@ query Events {
 		id
 		title
 		description
+		maxReservations
+		amountReservations
 	}
 }

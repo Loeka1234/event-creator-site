@@ -37,8 +37,20 @@ export type Event = {
   id?: Maybe<Scalars['Int']>;
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  amountReservations: Scalars['Int'];
+  maxReservations?: Maybe<Scalars['Int']>;
+  reservations: Array<Reservation>;
   creatorId: Scalars['Float'];
   creator: User;
+};
+
+export type Reservation = {
+  __typename?: 'Reservation';
+  id: Scalars['Int'];
+  email: Scalars['String'];
+  eventId: Scalars['Int'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Mutation = {
@@ -51,6 +63,7 @@ export type Mutation = {
   createEvent: EventResponse;
   updateEvent?: Maybe<Event>;
   deleteEvent: Scalars['Boolean'];
+  reserve: ReserveResponse;
 };
 
 
@@ -79,12 +92,14 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreateEventArgs = {
+  maxReservations?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
 
 export type MutationUpdateEventArgs = {
+  maxReservations?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
@@ -93,6 +108,12 @@ export type MutationUpdateEventArgs = {
 
 export type MutationDeleteEventArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationReserveArgs = {
+  eventId: Scalars['Int'];
+  email: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -111,6 +132,12 @@ export type EventResponse = {
   __typename?: 'EventResponse';
   error?: Maybe<FieldError>;
   event?: Maybe<Event>;
+};
+
+export type ReserveResponse = {
+  __typename?: 'ReserveResponse';
+  error?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
 };
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -136,6 +163,7 @@ export type ChangePasswordMutation = (
 export type CreateEventMutationVariables = Exact<{
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  maxReservations?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -246,7 +274,7 @@ export type EventByIdQuery = (
   { __typename?: 'Query' }
   & { eventById?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description' | 'creatorId'>
+    & Pick<Event, 'id' | 'title' | 'description' | 'amountReservations' | 'maxReservations' | 'creatorId'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
@@ -261,7 +289,7 @@ export type EventsQuery = (
   { __typename?: 'Query' }
   & { events: Array<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description'>
+    & Pick<Event, 'id' | 'title' | 'description' | 'maxReservations' | 'amountReservations'>
   )> }
 );
 
@@ -321,8 +349,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateEventDocument = gql`
-    mutation CreateEvent($title: String!, $description: String) {
-  createEvent(title: $title, description: $description) {
+    mutation CreateEvent($title: String!, $description: String, $maxReservations: Int) {
+  createEvent(title: $title, description: $description, maxReservations: $maxReservations) {
     error {
       field
       message
@@ -352,6 +380,7 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *   variables: {
  *      title: // value for 'title'
  *      description: // value for 'description'
+ *      maxReservations: // value for 'maxReservations'
  *   },
  * });
  */
@@ -580,6 +609,8 @@ export const EventByIdDocument = gql`
     id
     title
     description
+    amountReservations
+    maxReservations
     creatorId
     creator {
       id
@@ -623,6 +654,8 @@ export const EventsDocument = gql`
     id
     title
     description
+    maxReservations
+    amountReservations
   }
 }
     `;
