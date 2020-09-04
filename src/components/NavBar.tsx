@@ -16,18 +16,22 @@ import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import { isServer } from "./../utils/isServer";
 
 export interface Props {}
 
 export const NavBar: React.FC<Props> = ({}) => {
-	const { data, loading, error } = useMeQuery();
+	const { data, loading, error } = useMeQuery({
+		skip: isServer(),
+	});
 	const [logout] = useLogoutMutation();
 	const apolloclient = useApolloClient();
 	const [show, setShow] = useState(false);
 	const handleToggle = () => setShow(!show);
 
 	if (loading && !error) return null;
-
+	if (!data) return null;
+	
 	return (
 		<Box as="header" borderBottom="1px solid" borderBottomColor="gray.200">
 			<Flex

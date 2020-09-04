@@ -137,6 +137,7 @@ export type EventResponse = {
 export type ReserveResponse = {
   __typename?: 'ReserveResponse';
   error?: Maybe<Scalars['String']>;
+  fieldError?: Maybe<FieldError>;
   success: Scalars['Boolean'];
 };
 
@@ -246,6 +247,24 @@ export type RegisterMutation = (
     )>, user?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+    )> }
+  ) }
+);
+
+export type ReserveMutationVariables = Exact<{
+  eventId: Scalars['Int'];
+  email: Scalars['String'];
+}>;
+
+
+export type ReserveMutation = (
+  { __typename?: 'Mutation' }
+  & { reserve: (
+    { __typename?: 'ReserveResponse' }
+    & Pick<ReserveResponse, 'error' | 'success'>
+    & { fieldError?: Maybe<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
     )> }
   ) }
 );
@@ -566,6 +585,44 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const ReserveDocument = gql`
+    mutation Reserve($eventId: Int!, $email: String!) {
+  reserve(eventId: $eventId, email: $email) {
+    error
+    success
+    fieldError {
+      field
+      message
+    }
+  }
+}
+    `;
+export type ReserveMutationFn = Apollo.MutationFunction<ReserveMutation, ReserveMutationVariables>;
+
+/**
+ * __useReserveMutation__
+ *
+ * To run a mutation, you first call `useReserveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReserveMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reserveMutation, { data, loading, error }] = useReserveMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useReserveMutation(baseOptions?: Apollo.MutationHookOptions<ReserveMutation, ReserveMutationVariables>) {
+        return Apollo.useMutation<ReserveMutation, ReserveMutationVariables>(ReserveDocument, baseOptions);
+      }
+export type ReserveMutationHookResult = ReturnType<typeof useReserveMutation>;
+export type ReserveMutationResult = Apollo.MutationResult<ReserveMutation>;
+export type ReserveMutationOptions = Apollo.BaseMutationOptions<ReserveMutation, ReserveMutationVariables>;
 export const UpdateEventDocument = gql`
     mutation UpdateEvent($title: String!, $description: String, $id: Int!) {
   updateEvent(title: $title, description: $description, id: $id) {
