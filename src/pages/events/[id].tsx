@@ -69,7 +69,7 @@ const EventPage: NextPage = () => {
 									</ModalHeader>
 									<ModalCloseButton />
 									<Formik
-										initialValues={{ email: "" }}
+										initialValues={{ name: "", email: "" }}
 										onSubmit={async (
 											values,
 											{ setErrors }
@@ -83,7 +83,6 @@ const EventPage: NextPage = () => {
 													),
 												},
 											});
-											console.log("a", data);
 											if (data?.reserve.error)
 												setErrors({
 													email: data.reserve.error,
@@ -100,6 +99,11 @@ const EventPage: NextPage = () => {
 									>
 										<Form>
 											<ModalBody pb={6}>
+												<InputField
+													name="name"
+													label="Name"
+													placeholder="name"
+												/>
 												<InputField
 													name="email"
 													label="Email"

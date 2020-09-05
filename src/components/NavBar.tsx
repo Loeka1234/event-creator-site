@@ -17,10 +17,12 @@ import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { isServer } from "./../utils/isServer";
+import { useRouter } from "next/router";
 
 export interface Props {}
 
 export const NavBar: React.FC<Props> = ({}) => {
+	const router = useRouter();
 	const { data, loading, error } = useMeQuery({
 		skip: isServer(),
 	});
@@ -31,7 +33,7 @@ export const NavBar: React.FC<Props> = ({}) => {
 
 	if (loading && !error) return null;
 	if (!data) return null;
-	
+
 	return (
 		<Box as="header" borderBottom="1px solid" borderBottomColor="gray.200">
 			<Flex
@@ -133,6 +135,7 @@ export const NavBar: React.FC<Props> = ({}) => {
 								fontSize={20}
 								onClick={async () => {
 									await logout();
+									router.push("/");
 									await apolloclient.resetStore();
 								}}
 							>

@@ -1,10 +1,10 @@
-mutation Reserve($eventId: Int!, $email: String!) {
-	reserve(eventId: $eventId, email: $email) {
-		error
-		success
+mutation Reserve($eventId: Int!, $email: String!, $name: String!) {
+	reserve(eventId: $eventId, email: $email, name: $name) {
 		fieldError {
 			field
 			message
 		}
+		error
+		success
 	}
 }

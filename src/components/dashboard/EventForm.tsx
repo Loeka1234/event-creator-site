@@ -36,6 +36,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 	buttonText,
 	initialValues,
 }) => {
+
 	return (
 		<>
 			<Formik
@@ -43,16 +44,17 @@ export const EventForm: React.FC<EventFormProps> = ({
 					title: initialValues?.title || "",
 					description: initialValues?.description || "",
 					useMaxReservations:
-						initialValues?.useMaxReservations || false,
-					maxReservations: initialValues?.maxReservations || 10,
+						typeof initialValues?.useMaxReservations !== "undefined"
+							? initialValues.useMaxReservations
+							: false,
+					maxReservations:
+						typeof initialValues?.maxReservations !== "undefined"
+							? initialValues.maxReservations
+							: 10,
 				}}
 				onSubmit={onSubmit}
 			>
-				{({
-					isSubmitting,
-					values,
-					setValues,
-				}) => (
+				{({ isSubmitting, values, setValues }) => (
 					<Form>
 						<InputField
 							name="title"

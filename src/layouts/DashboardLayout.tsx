@@ -13,10 +13,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 	children,
 	pages,
 }) => {
-	const { data, loading } = useMeQuery();
+	const { data, loading, error } = useMeQuery();
 	const router = useRouter();
 
 	if (!loading && !data?.me?.username) router.push("/");
+
+	console.log("AN ERROR", error)
 
 	return (
 		<LandingPageLayout>

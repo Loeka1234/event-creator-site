@@ -48,6 +48,7 @@ export type Reservation = {
   __typename?: 'Reservation';
   id: Scalars['Int'];
   email: Scalars['String'];
+  name: Scalars['String'];
   eventId: Scalars['Int'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -113,6 +114,7 @@ export type MutationDeleteEventArgs = {
 
 export type MutationReserveArgs = {
   eventId: Scalars['Int'];
+  name: Scalars['String'];
   email: Scalars['String'];
 };
 
@@ -254,6 +256,7 @@ export type RegisterMutation = (
 export type ReserveMutationVariables = Exact<{
   eventId: Scalars['Int'];
   email: Scalars['String'];
+  name: Scalars['String'];
 }>;
 
 
@@ -273,6 +276,7 @@ export type UpdateEventMutationVariables = Exact<{
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  maxReservations?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -280,7 +284,7 @@ export type UpdateEventMutation = (
   { __typename?: 'Mutation' }
   & { updateEvent?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description' | 'creatorId'>
+    & Pick<Event, 'id' | 'title' | 'description' | 'creatorId' | 'amountReservations' | 'maxReservations'>
   )> }
 );
 
@@ -586,14 +590,14 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const ReserveDocument = gql`
-    mutation Reserve($eventId: Int!, $email: String!) {
-  reserve(eventId: $eventId, email: $email) {
-    error
-    success
+    mutation Reserve($eventId: Int!, $email: String!, $name: String!) {
+  reserve(eventId: $eventId, email: $email, name: $name) {
     fieldError {
       field
       message
     }
+    error
+    success
   }
 }
     `;
@@ -614,6 +618,7 @@ export type ReserveMutationFn = Apollo.MutationFunction<ReserveMutation, Reserve
  *   variables: {
  *      eventId: // value for 'eventId'
  *      email: // value for 'email'
+ *      name: // value for 'name'
  *   },
  * });
  */
@@ -624,12 +629,14 @@ export type ReserveMutationHookResult = ReturnType<typeof useReserveMutation>;
 export type ReserveMutationResult = Apollo.MutationResult<ReserveMutation>;
 export type ReserveMutationOptions = Apollo.BaseMutationOptions<ReserveMutation, ReserveMutationVariables>;
 export const UpdateEventDocument = gql`
-    mutation UpdateEvent($title: String!, $description: String, $id: Int!) {
-  updateEvent(title: $title, description: $description, id: $id) {
+    mutation UpdateEvent($title: String!, $description: String, $id: Int!, $maxReservations: Int) {
+  updateEvent(title: $title, description: $description, id: $id, maxReservations: $maxReservations) {
     id
     title
     description
     creatorId
+    amountReservations
+    maxReservations
   }
 }
     `;
@@ -651,6 +658,7 @@ export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation,
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      id: // value for 'id'
+ *      maxReservations: // value for 'maxReservations'
  *   },
  * });
  */

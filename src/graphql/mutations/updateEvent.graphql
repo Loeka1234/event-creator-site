@@ -1,8 +1,20 @@
-mutation UpdateEvent($title: String!, $description: String, $id: Int!) {
-	updateEvent(title: $title, description: $description, id: $id) {
+mutation UpdateEvent(
+	$title: String!
+	$description: String
+	$id: Int!
+	$maxReservations: Int
+) {
+	updateEvent(
+		title: $title
+		description: $description
+		id: $id
+		maxReservations: $maxReservations
+	) {
 		id
 		title
 		description
 		creatorId
+		amountReservations
+		maxReservations
 	}
 }

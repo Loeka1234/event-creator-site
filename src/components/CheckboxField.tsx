@@ -13,8 +13,9 @@ export const CheckboxField: React.FC<CheckboxFieldProps> = ({
 	...props
 }) => {
 	const [field] = useField(props);
+
 	return (
-		<Checkbox {...field} {...props}>
+		<Checkbox {...field} {...props} defaultIsChecked={field.value}>
 			{label}
 		</Checkbox>
 	);
