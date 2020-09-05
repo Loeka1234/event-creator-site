@@ -7,12 +7,13 @@ import { useEventByIdQuery } from "../../../generated/graphql";
 import { Wrapper } from "../../../components/Wrapper";
 import { useUpdateEventMutation } from "./../../../generated/graphql";
 import { EventForm } from "../../../components/dashboard/EventForm";
+import { isNullOrUndefined } from "util";
 
-// TODO: Fix that removing reservation limit works
 const Edit: NextPage = ({}) => {
 	const router = useRouter();
 	const { data, loading } = useEventByIdQuery({
 		variables: { id: parseInt(router.query.id as string) },
+		fetchPolicy: "network-only",
 	});
 	const [updateEvent] = useUpdateEventMutation();
 
@@ -38,8 +39,19 @@ const Edit: NextPage = ({}) => {
 							? true
 							: false,
 						maxReservations: data?.eventById?.maxReservations || 10,
+						startDate: data?.eventById?.startDate
+							? data.eventById.startDate
+							: Date.now(),
+						useEndDate: !isNullOrUndefined(
+							data?.eventById?.endDate
+						),
+						endDate:
+							typeof data?.eventById?.endDate !== "undefined"
+								? data.eventById.endDate
+								: null,
 					}}
-					onSubmit={async data => {
+					onSubmit={async ({ useEndDate, endDate, ...data }) => {
+						console.log(useEndDate, endDate, data);
 						await updateEvent({
 							variables: {
 								title: data.title!,
@@ -48,6 +60,8 @@ const Edit: NextPage = ({}) => {
 								maxReservations: data.useMaxReservations
 									? data.maxReservations
 									: null,
+								useEndDate,
+								endDate,
 							},
 						});
 						router.push("/dashboard");

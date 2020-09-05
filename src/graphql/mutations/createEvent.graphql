@@ -2,11 +2,15 @@ mutation CreateEvent(
 	$title: String!
 	$description: String
 	$maxReservations: Int
+	$startDate: Float!
+	$endDate: Float
 ) {
 	createEvent(
 		title: $title
 		description: $description
 		maxReservations: $maxReservations
+		startDate: $startDate
+		endDate: $endDate
 	) {
 		error {
 			field
@@ -16,6 +20,10 @@ mutation CreateEvent(
 			id
 			title
 			description
+			startDate
+			endDate
+			amountReservations
+			maxReservations
 		}
 	}
 }

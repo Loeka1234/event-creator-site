@@ -3,12 +3,16 @@ mutation UpdateEvent(
 	$description: String
 	$id: Int!
 	$maxReservations: Int
+	$useEndDate: Boolean
+	$endDate: Float
 ) {
 	updateEvent(
 		title: $title
 		description: $description
 		id: $id
 		maxReservations: $maxReservations
+		useEndDate: $useEndDate
+		endDate: $endDate
 	) {
 		id
 		title
@@ -16,5 +20,7 @@ mutation UpdateEvent(
 		creatorId
 		amountReservations
 		maxReservations
+		startDate
+		endDate
 	}
 }

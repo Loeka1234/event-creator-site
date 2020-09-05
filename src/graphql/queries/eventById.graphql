@@ -1,17 +1,13 @@
 query EventById($id: Int!) {
 	eventById(id: $id) {
-		id
 		title
 		description
 		amountReservations
 		maxReservations
-		creatorId
+		startDate
+		endDate
 		creator {
-			id
 			username
-			email
-			createdAt
-			updatedAt
 		}
 	}
 }

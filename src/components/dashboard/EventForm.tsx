@@ -2,24 +2,30 @@ import { Formik, Form, FormikHelpers } from "formik";
 import InputField from "../InputField";
 import {
 	Button,
-	FormLabel,
-	Switch,
 	Flex,
 	NumberInput,
 	NumberInputField,
 	NumberInputStepper,
 	NumberIncrementStepper,
 	NumberDecrementStepper,
-	Checkbox,
+	InputGroup,
+	InputLeftAddon,
+	Input,
+	InputRightAddon,
+	Text,
+	InputAddon,
 } from "@chakra-ui/core";
-import { parse } from "path";
 import { CheckboxField } from "../CheckboxField";
+import { DateField } from "./DateField";
 
 type values = {
 	title: string;
 	description: string;
 	useMaxReservations: boolean;
 	maxReservations: number;
+	startDate: number;
+	useEndDate: boolean;
+	endDate: number | null;
 };
 
 interface EventFormProps {
@@ -36,7 +42,6 @@ export const EventForm: React.FC<EventFormProps> = ({
 	buttonText,
 	initialValues,
 }) => {
-
 	return (
 		<>
 			<Formik
@@ -51,6 +56,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 						typeof initialValues?.maxReservations !== "undefined"
 							? initialValues.maxReservations
 							: 10,
+					startDate: initialValues?.startDate || Date.now(),
+					useEndDate: initialValues?.useEndDate || false,
+					endDate: initialValues?.endDate || null,
 				}}
 				onSubmit={onSubmit}
 			>
@@ -94,6 +102,37 @@ export const EventForm: React.FC<EventFormProps> = ({
 									<NumberDecrementStepper />
 								</NumberInputStepper>
 							</NumberInput>
+						</Flex>
+						<DateField
+							error="123 test 123"
+							mt={4}
+							label="Date: "
+							initialDate={values.startDate}
+							onNewDate={newDate =>
+								setValues({
+									...values,
+									startDate: newDate,
+								})
+							}
+						/>
+						<Flex w="100%" justify="center" align="center">
+							<CheckboxField
+								name="useEndDate"
+								label="End date: "
+							/>
+							<DateField
+								label=""
+								initialDate={
+									values.endDate ? values.endDate : Date.now()
+								}
+								onNewDate={newDate =>
+									setValues({
+										...values,
+										endDate: newDate,
+									})
+								}
+								disabled={!values.useEndDate}
+							/>
 						</Flex>
 						<Button
 							type="submit"

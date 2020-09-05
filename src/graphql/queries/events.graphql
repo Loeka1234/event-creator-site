@@ -5,5 +5,7 @@ query Events {
 		description
 		maxReservations
 		amountReservations
+		startDate
+		endDate
 	}
 }

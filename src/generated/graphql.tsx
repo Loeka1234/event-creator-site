@@ -40,6 +40,8 @@ export type Event = {
   amountReservations: Scalars['Int'];
   maxReservations?: Maybe<Scalars['Int']>;
   reservations: Array<Reservation>;
+  startDate: Scalars['Float'];
+  endDate?: Maybe<Scalars['Float']>;
   creatorId: Scalars['Float'];
   creator: User;
 };
@@ -93,6 +95,8 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreateEventArgs = {
+  endDate?: Maybe<Scalars['Float']>;
+  startDate: Scalars['Float'];
   maxReservations?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -100,6 +104,9 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationUpdateEventArgs = {
+  endDate?: Maybe<Scalars['Float']>;
+  useEndDate?: Maybe<Scalars['Boolean']>;
+  startDate?: Maybe<Scalars['Float']>;
   maxReservations?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -167,6 +174,8 @@ export type CreateEventMutationVariables = Exact<{
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   maxReservations?: Maybe<Scalars['Int']>;
+  startDate: Scalars['Float'];
+  endDate?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -179,7 +188,7 @@ export type CreateEventMutation = (
       & Pick<FieldError, 'field' | 'message'>
     )>, event?: Maybe<(
       { __typename?: 'Event' }
-      & Pick<Event, 'id' | 'title' | 'description'>
+      & Pick<Event, 'id' | 'title' | 'description' | 'startDate' | 'endDate' | 'amountReservations' | 'maxReservations'>
     )> }
   ) }
 );
@@ -277,6 +286,8 @@ export type UpdateEventMutationVariables = Exact<{
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   maxReservations?: Maybe<Scalars['Int']>;
+  useEndDate?: Maybe<Scalars['Boolean']>;
+  endDate?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -284,7 +295,7 @@ export type UpdateEventMutation = (
   { __typename?: 'Mutation' }
   & { updateEvent?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description' | 'creatorId' | 'amountReservations' | 'maxReservations'>
+    & Pick<Event, 'id' | 'title' | 'description' | 'creatorId' | 'amountReservations' | 'maxReservations' | 'startDate' | 'endDate'>
   )> }
 );
 
@@ -297,10 +308,10 @@ export type EventByIdQuery = (
   { __typename?: 'Query' }
   & { eventById?: Maybe<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description' | 'amountReservations' | 'maxReservations' | 'creatorId'>
+    & Pick<Event, 'title' | 'description' | 'amountReservations' | 'maxReservations' | 'startDate' | 'endDate'>
     & { creator: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+      & Pick<User, 'username'>
     ) }
   )> }
 );
@@ -312,7 +323,7 @@ export type EventsQuery = (
   { __typename?: 'Query' }
   & { events: Array<(
     { __typename?: 'Event' }
-    & Pick<Event, 'id' | 'title' | 'description' | 'maxReservations' | 'amountReservations'>
+    & Pick<Event, 'id' | 'title' | 'description' | 'maxReservations' | 'amountReservations' | 'startDate' | 'endDate'>
   )> }
 );
 
@@ -372,8 +383,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateEventDocument = gql`
-    mutation CreateEvent($title: String!, $description: String, $maxReservations: Int) {
-  createEvent(title: $title, description: $description, maxReservations: $maxReservations) {
+    mutation CreateEvent($title: String!, $description: String, $maxReservations: Int, $startDate: Float!, $endDate: Float) {
+  createEvent(title: $title, description: $description, maxReservations: $maxReservations, startDate: $startDate, endDate: $endDate) {
     error {
       field
       message
@@ -382,6 +393,10 @@ export const CreateEventDocument = gql`
       id
       title
       description
+      startDate
+      endDate
+      amountReservations
+      maxReservations
     }
   }
 }
@@ -404,6 +419,8 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      maxReservations: // value for 'maxReservations'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
  *   },
  * });
  */
@@ -629,14 +646,16 @@ export type ReserveMutationHookResult = ReturnType<typeof useReserveMutation>;
 export type ReserveMutationResult = Apollo.MutationResult<ReserveMutation>;
 export type ReserveMutationOptions = Apollo.BaseMutationOptions<ReserveMutation, ReserveMutationVariables>;
 export const UpdateEventDocument = gql`
-    mutation UpdateEvent($title: String!, $description: String, $id: Int!, $maxReservations: Int) {
-  updateEvent(title: $title, description: $description, id: $id, maxReservations: $maxReservations) {
+    mutation UpdateEvent($title: String!, $description: String, $id: Int!, $maxReservations: Int, $useEndDate: Boolean, $endDate: Float) {
+  updateEvent(title: $title, description: $description, id: $id, maxReservations: $maxReservations, useEndDate: $useEndDate, endDate: $endDate) {
     id
     title
     description
     creatorId
     amountReservations
     maxReservations
+    startDate
+    endDate
   }
 }
     `;
@@ -659,6 +678,8 @@ export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation,
  *      description: // value for 'description'
  *      id: // value for 'id'
  *      maxReservations: // value for 'maxReservations'
+ *      useEndDate: // value for 'useEndDate'
+ *      endDate: // value for 'endDate'
  *   },
  * });
  */
@@ -671,18 +692,14 @@ export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventM
 export const EventByIdDocument = gql`
     query EventById($id: Int!) {
   eventById(id: $id) {
-    id
     title
     description
     amountReservations
     maxReservations
-    creatorId
+    startDate
+    endDate
     creator {
-      id
       username
-      email
-      createdAt
-      updatedAt
     }
   }
 }
@@ -721,6 +738,8 @@ export const EventsDocument = gql`
     description
     maxReservations
     amountReservations
+    startDate
+    endDate
   }
 }
     `;
