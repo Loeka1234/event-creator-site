@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { withApollo } from "../../utils/withApollo";
 import { useEventByIdQuery, useReserveMutation } from "../../generated/graphql";
 import { LandingPageLayout } from "../../layouts/LandingPageLayout";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "../../components/Wrapper";
 import {
@@ -18,11 +18,17 @@ import {
 	ModalBody,
 	ModalFooter,
 	useDisclosure,
+	List,
+	ListItem,
 } from "@chakra-ui/core";
 import { capitalizeFirstLetter } from "./../../utils/capitalizeFirstLetter";
 import { Formik, Form } from "formik";
 import InputField from "../../components/InputField";
 import { toErrorMap } from "./../../utils/toErrorMap";
+import moment from "moment";
+import { formatDate } from "./../../utils/formatDate";
+import { stringify } from "querystring";
+import { resultKeyNameFromField } from "@apollo/client/utilities";
 
 const EventPage: NextPage = () => {
 	const router = useRouter();
@@ -41,7 +47,15 @@ const EventPage: NextPage = () => {
 	if (loading) return null;
 	if (!data?.eventById) return null; // TODO: return error or something
 
-	const { title, description, creator } = data.eventById;
+	const {
+		title,
+		description,
+		creator,
+		startDate,
+		endDate,
+		amountReservations,
+		maxReservations,
+	} = data.eventById;
 	return (
 		<LandingPageLayout>
 			<Wrapper variant="large">
@@ -57,7 +71,38 @@ const EventPage: NextPage = () => {
 							<Heading as="h3" fontSize={20} fontWeight={400}>
 								By {capitalizeFirstLetter(creator.username)}
 							</Heading>
-							<Text mt={4}>{description}</Text>
+							<List
+								styleType="none"
+								justifyContent="center"
+								alignItems="center"
+								display="flex"
+								flexDir="column"
+								mt={2}
+							>
+								<ListItem>
+									Starts on: {formatDate(startDate)}
+								</ListItem>
+								{endDate && (
+									<ListItem>
+										End on: {formatDate(startDate)}
+									</ListItem>
+								)}
+								<ListItem>
+									Reservations: {amountReservations}/
+									{maxReservations}
+								</ListItem>
+							</List>
+							<Text my={4} maxW={500} textAlign="center">
+								{description?.split("\n").map((sentence, i) => {
+									if (sentence === "") return;
+									return (
+										<Fragment key={i}>
+											{sentence}
+											<br />
+										</Fragment>
+									);
+								})}
+							</Text>
 							<Button variantColor="teal" mt={2} onClick={onOpen}>
 								Reserve
 							</Button>
