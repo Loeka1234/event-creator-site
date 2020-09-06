@@ -1,7 +1,6 @@
 import { createWithApollo } from "./createWithApollo";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { NextPageContext } from "next";
-import { Reservation, PaginatedReservationsQueryResult } from "../generated/graphql";
 
 const createClient = (ctx: NextPageContext) =>
 	new ApolloClient({
