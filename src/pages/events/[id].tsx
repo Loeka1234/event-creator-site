@@ -25,10 +25,7 @@ import { capitalizeFirstLetter } from "./../../utils/capitalizeFirstLetter";
 import { Formik, Form } from "formik";
 import InputField from "../../components/InputField";
 import { toErrorMap } from "./../../utils/toErrorMap";
-import moment from "moment";
 import { formatDate } from "./../../utils/formatDate";
-import { stringify } from "querystring";
-import { resultKeyNameFromField } from "@apollo/client/utilities";
 
 const EventPage: NextPage = () => {
 	const router = useRouter();

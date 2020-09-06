@@ -8,12 +8,6 @@ import {
 	NumberInputStepper,
 	NumberIncrementStepper,
 	NumberDecrementStepper,
-	InputGroup,
-	InputLeftAddon,
-	Input,
-	InputRightAddon,
-	Text,
-	InputAddon,
 } from "@chakra-ui/core";
 import { CheckboxField } from "../CheckboxField";
 import { DateField } from "./DateField";
