@@ -16,11 +16,18 @@ export type Query = {
   me?: Maybe<User>;
   events: Array<Event>;
   eventById?: Maybe<Event>;
+  paginatedReservations: PaginatedReservationsResponse;
 };
 
 
 export type QueryEventByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryPaginatedReservationsArgs = {
+  cursor?: Maybe<Scalars['Float']>;
+  limit: Scalars['Int'];
 };
 
 export type User = {
@@ -52,8 +59,14 @@ export type Reservation = {
   email: Scalars['String'];
   name: Scalars['String'];
   eventId: Scalars['Int'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  createdAt: Scalars['Float'];
+  updatedAt: Scalars['Float'];
+};
+
+export type PaginatedReservationsResponse = {
+  __typename?: 'PaginatedReservationsResponse';
+  reservations: Array<Reservation>;
+  hasMore: Scalars['Boolean'];
 };
 
 export type Mutation = {
@@ -149,6 +162,11 @@ export type ReserveResponse = {
   fieldError?: Maybe<FieldError>;
   success: Scalars['Boolean'];
 };
+
+export type ReservationSnippetFragment = (
+  { __typename?: 'Reservation' }
+  & Pick<Reservation, 'id' | 'email' | 'name' | 'eventId' | 'createdAt' | 'updatedAt'>
+);
 
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
@@ -338,7 +356,34 @@ export type MeQuery = (
   )> }
 );
 
+export type PaginatedReservationsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['Float']>;
+}>;
 
+
+export type PaginatedReservationsQuery = (
+  { __typename?: 'Query' }
+  & { paginatedReservations: (
+    { __typename?: 'PaginatedReservationsResponse' }
+    & Pick<PaginatedReservationsResponse, 'hasMore'>
+    & { reservations: Array<(
+      { __typename?: 'Reservation' }
+      & ReservationSnippetFragment
+    )> }
+  ) }
+);
+
+export const ReservationSnippetFragmentDoc = gql`
+    fragment ReservationSnippet on Reservation {
+  id
+  email
+  name
+  eventId
+  createdAt
+  updatedAt
+}
+    `;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($newPassword: String!, $token: String!) {
   changePassword(newPassword: $newPassword, token: $token) {
@@ -801,3 +846,40 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const PaginatedReservationsDocument = gql`
+    query PaginatedReservations($limit: Int!, $cursor: Float) {
+  paginatedReservations(limit: $limit, cursor: $cursor) {
+    reservations {
+      ...ReservationSnippet
+    }
+    hasMore
+  }
+}
+    ${ReservationSnippetFragmentDoc}`;
+
+/**
+ * __usePaginatedReservationsQuery__
+ *
+ * To run a query within a React component, call `usePaginatedReservationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaginatedReservationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaginatedReservationsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function usePaginatedReservationsQuery(baseOptions?: Apollo.QueryHookOptions<PaginatedReservationsQuery, PaginatedReservationsQueryVariables>) {
+        return Apollo.useQuery<PaginatedReservationsQuery, PaginatedReservationsQueryVariables>(PaginatedReservationsDocument, baseOptions);
+      }
+export function usePaginatedReservationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedReservationsQuery, PaginatedReservationsQueryVariables>) {
+          return Apollo.useLazyQuery<PaginatedReservationsQuery, PaginatedReservationsQueryVariables>(PaginatedReservationsDocument, baseOptions);
+        }
+export type PaginatedReservationsQueryHookResult = ReturnType<typeof usePaginatedReservationsQuery>;
+export type PaginatedReservationsLazyQueryHookResult = ReturnType<typeof usePaginatedReservationsLazyQuery>;
+export type PaginatedReservationsQueryResult = Apollo.QueryResult<PaginatedReservationsQuery, PaginatedReservationsQueryVariables>;

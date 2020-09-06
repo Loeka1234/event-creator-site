@@ -1,0 +1,8 @@
+query PaginatedReservations($limit: Int!, $cursor: Float) {
+	paginatedReservations(limit: $limit, cursor: $cursor) {
+		reservations {
+			...ReservationSnippet
+		}
+        hasMore
+	}
+}

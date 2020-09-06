@@ -34,7 +34,10 @@ const Create: NextPage = () => {
 								startDate: values.startDate,
 								endDate: useEndDate ? values.endDate : null,
 							},
+							fetchPolicy: "no-cache",
 							update: (cache, { data: _data }) => {
+								if (data?.createEvent.error) return;
+
 								let otherEvents;
 								try {
 									otherEvents = cache.readQuery<EventsQuery>({
@@ -50,7 +53,8 @@ const Create: NextPage = () => {
 											events: [
 												...((otherEvents?.events as any) ||
 													undefined),
-												_data?.createEvent.event,
+												_data?.createEvent.event ||
+													null,
 											],
 										},
 									});
@@ -71,7 +75,8 @@ const Create: NextPage = () => {
 									isClosable: true,
 								});
 							setErrors(toErrorMap(data.createEvent.error));
-						} else router.push("/dashboard");
+						} else if (data?.createEvent.event)
+							router.push("/dashboard");
 					}}
 				/>
 			</Wrapper>

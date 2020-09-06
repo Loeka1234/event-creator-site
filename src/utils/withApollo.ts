@@ -1,6 +1,7 @@
 import { createWithApollo } from "./createWithApollo";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { NextPageContext } from "next";
+import { Reservation, PaginatedReservationsQueryResult } from "../generated/graphql";
 
 const createClient = (ctx: NextPageContext) =>
 	new ApolloClient({
@@ -13,6 +14,18 @@ const createClient = (ctx: NextPageContext) =>
 							keyArgs: [],
 							merge(_ignored, incoming) {
 								return incoming;
+							},
+						},
+						paginatedReservations: {
+							keyArgs: [],
+							merge(existing, incoming) {
+								return {
+									...incoming,
+									reservations: [
+										...(existing?.reservations || []),
+										...incoming.reservations,
+									],
+								};
 							},
 						},
 					},

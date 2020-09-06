@@ -1,0 +1,8 @@
+fragment ReservationSnippet on Reservation {
+	id
+	email
+	name
+	eventId
+	createdAt
+	updatedAt
+}
